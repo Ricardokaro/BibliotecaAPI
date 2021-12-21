@@ -17,12 +17,18 @@ namespace BibliotecaAPI
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            /*modelBuilder.Entity<PeliculasActores>()
-                .HasKey(x => new { x.ActorId, x.PeliculaId });  */         
+            modelBuilder.Entity<LibrosAutores>()
+                .HasKey(x => new { x.AutorId, x.LibroId });
+
+            modelBuilder.Entity<LibrosCategorias>()
+                .HasKey(x => new { x.CategoriaId, x.LibroId });
 
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Categoria> Categorias { get; set; }        
+        public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Autor> Autores { get; set; }
+        public DbSet<Libro> Libros { get; set; }
+
     }
 }
