@@ -14,15 +14,14 @@ namespace BibliotecaAPI.DTOs
         [Required]
         [StringLength(maximumLength: 300)]
         public string Titulo { get; set; }
-        public string Subtitulo { get; set; }
-        public string Trailer { get; set; }
+        public string Subtitulo { get; set; }        
         public DateTime FechaPublicacion { get; set; }
         public string Editor { get; set; }
         public string Descripcion { get; set; }
         public IFormFile Imagen { get; set; }
         [ModelBinder(BinderType = typeof(TypeBinder<List<int>>))]
         public List<int> CategoriasIds { get; set; }
-        [ModelBinder(BinderType = typeof(TypeBinder<List<int>>))]
-        public List<int> AutoresIds { get; set; }          
+        [ModelBinder(BinderType = typeof(TypeBinder<List<AutorLibroCreacionDTO>>))]
+        public List<AutorLibroCreacionDTO> Autores { get; set; }          
     }
 }

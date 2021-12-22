@@ -34,31 +34,37 @@ namespace BibliotecaAPI.Utilidades
         private List<CategoriaDTO> MapearCategoria(Libro libro, LibroDTO libroDTO)
         {
             var resultado = new List<CategoriaDTO>();
-            foreach (var lib in libro.LibrosCategorias)
+            if (libroDTO.Categorias != null)
             {
-                resultado.Add(new CategoriaDTO()
+                foreach (var lib in libro.LibrosCategorias)
                 {
-                    Id = lib.CategoriaId,
-                    Nombre = lib.Categoria.Nombre                    
-                });
-            }
+                    resultado.Add(new CategoriaDTO()
+                    {
+                        Id = lib.CategoriaId,
+                        Nombre = lib.Categoria.Nombre
+                    });
+                }
+            }            
             return resultado;
         }
 
         private List<AutorDTO> MapearAutores(Libro libro, LibroDTO libroDTO)
         {
             var resultado = new List<AutorDTO>();
-            foreach (var a in libro.LibrosAutores)
+            if (libroDTO.Autores != null)
             {
-                resultado.Add(new AutorDTO()
+                foreach (var a in libro.LibrosAutores)
                 {
-                    Id = a.AutorId,
-                    Nombre = a.Autor.Nombre,
-                    Biografia = a.Autor.Biografia,
-                    FechaNacimiento = a.Autor.FechaNacimiento,
-                    Foto = a.Autor.Foto
-                });
-            }
+                    resultado.Add(new AutorDTO()
+                    {
+                        Id = a.AutorId,
+                        Nombre = a.Autor.Nombre,
+                        Biografia = a.Autor.Biografia,
+                        FechaNacimiento = a.Autor.FechaNacimiento,
+                        Foto = a.Autor.Foto
+                    });
+                }
+            }            
             return resultado;
         }
 
@@ -67,11 +73,11 @@ namespace BibliotecaAPI.Utilidades
         {
             var resultado = new List<LibrosAutores>();
 
-            if (libroCreacionDTO.AutoresIds == null) { return resultado; }
+            if (libroCreacionDTO.Autores == null) { return resultado; }
 
-            foreach (var id in libroCreacionDTO.AutoresIds)
+            foreach (var autor in libroCreacionDTO.Autores)
             {
-                resultado.Add(new LibrosAutores() { AutorId = id });
+                resultado.Add(new LibrosAutores() { AutorId = autor.Id });
             }
 
             return resultado;

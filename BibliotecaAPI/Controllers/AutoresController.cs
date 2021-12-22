@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BibliotecaAPI.DTOs;
+using BibliotecaAPI.Entidades;
 using BibliotecaAPI.Utilidades;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -70,7 +71,7 @@ namespace BibliotecaAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromForm] AutorCreacionDTO autorCreacionDTO)
         {
-            var autor = mapper.Map<AutorDTO>(autorCreacionDTO);
+            var autor = mapper.Map<Autor>(autorCreacionDTO);
 
             if (autorCreacionDTO.Foto != null)
             {

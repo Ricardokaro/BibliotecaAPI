@@ -45,7 +45,9 @@ namespace BibliotecaAPI.Controllers
             var top = 6;
             var hoy = DateTime.Today;
 
-            var libros = await context.Libros                
+            var libros = await context.Libros
+                .Include(x => x.LibrosCategorias).ThenInclude(x => x.Categoria)
+                .Include(x => x.LibrosAutores).ThenInclude(x => x.Autor)
                 .OrderBy(x => x.FechaPublicacion)
                 .Take(top)
                 .ToListAsync();            
@@ -81,6 +83,8 @@ namespace BibliotecaAPI.Controllers
             if (librosFiltrarDTO.CategoriaId != 0)
             {
                 librosQueryable = librosQueryable
+                    .Include(x => x.LibrosCategorias).ThenInclude(x => x.Categoria)
+                    .Include(x => x.LibrosAutores).ThenInclude(x => x.Autor)
                     .Where(x => x.LibrosCategorias.Select(y => y.CategoriaId)
                     .Contains(librosFiltrarDTO.CategoriaId));
             }
@@ -88,14 +92,16 @@ namespace BibliotecaAPI.Controllers
             if (librosFiltrarDTO.AutorId != 0)
             {
                 librosQueryable = librosQueryable
+                    .Include(x => x.LibrosCategorias).ThenInclude(x => x.Categoria)
+                    .Include(x => x.LibrosAutores).ThenInclude(x => x.Autor)
                     .Where(x => x.LibrosAutores.Select(y => y.AutorId)
                     .Contains(librosFiltrarDTO.AutorId));
             }
 
             await HttpContext.InsertarParametrosPaginacionEnCabecera(librosQueryable);
 
-            var peliculas = await librosQueryable.Paginar(librosFiltrarDTO.PaginacionDTO).ToListAsync();
-            return mapper.Map<List<LibroDTO>>(peliculas);
+            var libros = await librosQueryable.Paginar(librosFiltrarDTO.PaginacionDTO).ToListAsync();
+            return mapper.Map<List<LibroDTO>>(libros);
         }
 
 
@@ -133,9 +139,17 @@ namespace BibliotecaAPI.Controllers
 
             var libro = librosActionResult.Value;
 
+            var categoriasSeleccionadosIds = libro.Categorias.Select(x => x.Id).ToList();
+            var categoriasNoSeleccionados = await context.Categorias
+                .Where(x => !categoriasSeleccionadosIds.Contains(x.Id))
+                .ToListAsync();
+
+            var generosNoSeleccionadosDTO = mapper.Map<List<CategoriaDTO>>(categoriasNoSeleccionados);            
+
             var respuesta = new LibrosPutGetDTO();
             respuesta.Libro = libro;
-            respuesta.Categorias = libro.Categorias;
+            respuesta.CategoriasSeleccionados = libro.Categorias;
+            respuesta.CategoriasNoSeleccionados = generosNoSeleccionadosDTO;
             respuesta.Autores = libro.Autores;            
             return respuesta;
         }
