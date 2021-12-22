@@ -25,6 +25,7 @@ namespace BibliotecaAPI.Utilidades
                .ForMember(x => x.Autores, options => options.MapFrom(MapearAutores));
 
             CreateMap<LibroCreacionDTO, Libro>()
+                .ForMember(x => x.Imagen, options => options.Ignore())
                 .ForMember(x => x.LibrosAutores, options => options.MapFrom(MapearLibrosAutores))
                 .ForMember(x => x.LibrosCategorias, options => options.MapFrom(MapearLibrosCategorias));
 
@@ -34,7 +35,7 @@ namespace BibliotecaAPI.Utilidades
         private List<CategoriaDTO> MapearCategoria(Libro libro, LibroDTO libroDTO)
         {
             var resultado = new List<CategoriaDTO>();
-            if (libroDTO.Categorias != null)
+            if (libro.LibrosCategorias != null)
             {
                 foreach (var lib in libro.LibrosCategorias)
                 {
@@ -51,7 +52,7 @@ namespace BibliotecaAPI.Utilidades
         private List<AutorDTO> MapearAutores(Libro libro, LibroDTO libroDTO)
         {
             var resultado = new List<AutorDTO>();
-            if (libroDTO.Autores != null)
+            if (libro.LibrosAutores != null)
             {
                 foreach (var a in libro.LibrosAutores)
                 {
